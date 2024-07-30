@@ -111,12 +111,12 @@ export default function Page() {
                 </p>
 
                 <div className="mt-4 flex justify-center">
-                  <Calendar
+                  {/* <Calendar
                     minimumDate={utils('en').getToday()}
                     value={selectedDay!}
                     onChange={setSelectedDay}
                     shouldHighlightWeekends
-                  />
+                  /> */}
                 </div>
               </div>
 
