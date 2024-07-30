@@ -4,8 +4,18 @@ import React, { useState } from 'react';
 import 'react-modern-calendar-datepicker/lib/DatePicker.css';
 import { Calendar, DayRange, utils } from 'react-modern-calendar-datepicker';
 
+type Page = 'waktu_dan_tempat' | 'informasi_pemesanan' | 'pembayaran';
+type JenisPenyewaan = 'per sesi' | 'per event';
+
 export default function Page() {
+  const [page, setPage] = useState<Page>('waktu_dan_tempat');
+
   const [selectedDay, setSelectedDay] = useState<DayRange | null>(null);
+  const [jenisPenyewaan, setJenisPenyewaan] = useState<JenisPenyewaan | null>(
+    null
+  );
+  const [lapangan, setLapangan] = useState<string | null>(null);
+  const [waktu, setWaktu] = useState<string | null>(null);
 
   return (
     <div className="bg-background w-full h-full">
@@ -17,20 +27,42 @@ export default function Page() {
                 <div className="bg-white rounded-full border-4 border-secondary w-8 h-8"></div>
               </div>
               <p className="text-lg">Pilih Waktu dan Tempat</p>
-              <div className="w-[calc(100%+12rem)] start-1/2 top-4 absolute h-0.5 -z-1 bg-secondary"></div>
+              <div
+                className={`w-[calc(100%+12rem)] start-1/2 top-4 absolute h-0.5 -z-1 ${
+                  page === 'informasi_pemesanan'
+                    ? 'bg-secondary'
+                    : 'bg-gray-300'
+                }`}
+              ></div>
             </div>
 
             <div className="flex flex-col justify-center items-center w-52 gap-1.5 relative">
               <div className="flex justify-center z-10">
-                <div className="bg-white rounded-full border-4 border-secondary w-8 h-8"></div>
+                <div
+                  className={`rounded-full border-4 ${
+                    page === 'informasi_pemesanan'
+                      ? 'bg-white border-secondary'
+                      : 'bg-gray-300'
+                  } w-8 h-8`}
+                ></div>
               </div>
               <p className="text-lg">Informasi Pemesanan</p>
-              <div className="w-[calc(100%+12rem)] start-1/2 top-4 absolute h-0.5 -z-1 bg-gray-300"></div>
+              <div
+                className={`w-[calc(100%+12rem)] start-1/2 top-4 absolute h-0.5 -z-1 ${
+                  page === 'pembayaran' ? 'bg-secondary' : 'bg-gray-300'
+                }`}
+              ></div>
             </div>
 
             <div className="flex flex-col justify-center items-center w-52 gap-1.5">
               <div className="flex justify-center z-10">
-                <div className="bg-white rounded-full border-4 border-secondary w-8 h-8"></div>
+                <div
+                  className={`bg-white rounded-full border-4 ${
+                    page === 'pembayaran'
+                      ? 'border-secondary bg-white'
+                      : 'bg-gray-300'
+                  } w-8 h-8`}
+                ></div>
               </div>
               <p className="text-lg">Pembayaran</p>
             </div>
@@ -60,108 +92,190 @@ export default function Page() {
           </div>
         </section>
 
-        <section className="mt-20">
-          <div className="flex gap-4">
-            <div className="w-[55%] rounded-lg bg-white py-8 px-6">
-              <div>logo dispora</div>
-              <p>Pilih tanggal booking lapangan yang anda inginkan</p>
+        {page === 'waktu_dan_tempat' && (
+          <section className="mt-20">
+            <div className="flex gap-4">
+              <div className="w-[55%] rounded-lg bg-white py-8 px-6">
+                <div className="flex justify-center">
+                  <img
+                    src="/img/logo-2.png"
+                    alt=""
+                    width={506}
+                    height={73}
+                    className="w-48"
+                  />
+                </div>
 
-              <div className=" mt-4 flex justify-center">
-                <Calendar
-                  minimumDate={utils('en').getToday()}
-                  value={selectedDay!}
-                  onChange={setSelectedDay}
-                  shouldHighlightWeekends
-                />
+                <p className="mt-4">
+                  Pilih tanggal booking lapangan yang anda inginkan
+                </p>
+
+                <div className="mt-4 flex justify-center">
+                  <Calendar
+                    minimumDate={utils('en').getToday()}
+                    value={selectedDay!}
+                    onChange={setSelectedDay}
+                    shouldHighlightWeekends
+                  />
+                </div>
+              </div>
+
+              <div className="w-[45%] rounded-lg bg-white  py-8 px-6">
+                <div>
+                  <div>
+                    <p className="text-lg font-semibold">
+                      Pilih Jenis Penyewaan
+                    </p>
+
+                    <div className="flex gap-1.5 mt-4">
+                      <div className="flex items-center">
+                        <input
+                          checked={jenisPenyewaan === 'per sesi'}
+                          onChange={() => {
+                            setJenisPenyewaan('per sesi');
+                          }}
+                          id="jenis-penyewaan-1"
+                          type="radio"
+                          value="1"
+                          name="jenis-penyewaan"
+                          className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                        />
+                        <label
+                          htmlFor="jenis-penyewaan-1"
+                          className="ms-2 text-sm font-medium text-gray-900"
+                        >
+                          Per Sesi
+                        </label>
+                      </div>
+                      <div className="flex items-center">
+                        <input
+                          checked={jenisPenyewaan === 'per event'}
+                          onChange={() => {
+                            setJenisPenyewaan('per event');
+                          }}
+                          id="jenis-penyewaan-2"
+                          type="radio"
+                          value="2"
+                          name="jenis-penyewaan"
+                          className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                        />
+                        <label
+                          htmlFor="jenis-penyewaan-2"
+                          className="ms-2 text-sm font-medium text-gray-900"
+                        >
+                          Per Event (ex:pameran)
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="mt-4">
+                    <p className="text-lg font-semibold">Pilih Lapangan</p>
+
+                    <div className="mt-4 flex flex-col gap-2">
+                      <button
+                        className={`py-2 px-3 border border-gray-500 rounded-lg flex gap-1 items-center hover:bg-gray-100 ${
+                          lapangan === '1' ? ' bg-gray-200' : ''
+                        }`}
+                        onClick={() => {
+                          setLapangan('1');
+                        }}
+                      >
+                        <div className="w-10 h-10 bg-gray-700"></div>
+                        <div>
+                          <p>Lapangan Bola Kamboja</p>
+                          <p>Mayor Santoso, Palembang</p>
+                        </div>
+                      </button>
+
+                      <button
+                        className={`py-2 px-3 border border-gray-500 rounded-lg flex gap-1 items-center hover:bg-gray-100 ${
+                          lapangan === '2' ? ' bg-gray-200' : ''
+                        }`}
+                        onClick={() => {
+                          setLapangan('2');
+                        }}
+                      >
+                        <div className="w-10 h-10 bg-gray-700"></div>
+                        <div>
+                          <p>Lapangan Bola Kamboja</p>
+                          <p>Mayor Santoso, Palembang</p>
+                        </div>
+                      </button>
+                    </div>
+                  </div>
+
+                  <div className="mt-4">
+                    <p className="text-lg font-semibold">
+                      Pilih Waktu Pemesanan
+                    </p>
+
+                    {!lapangan && (
+                      <p className="mt-2 text-secondary">
+                        Silahkan pilih lapangan terlebih dahulu
+                      </p>
+                    )}
+
+                    <div className="mt-4 flex flex-col gap-2">
+                      <button
+                        className={`py-4 px-3 border border-gray-500 rounded-lg text-center text-secondary hover:bg-gray-100 ${
+                          waktu === '06:00 - 12:00' ? ' bg-gray-200' : ''
+                        }`}
+                        onClick={() => {
+                          setWaktu('06:00 - 12:00');
+                        }}
+                      >
+                        06:00 - 12:00
+                      </button>
+
+                      <button
+                        className={`py-4 px-3 border border-gray-500 rounded-lg text-center text-secondary hover:bg-gray-100 ${
+                          waktu === '12:00 - 18:00' ? ' bg-gray-200' : ''
+                        }`}
+                        onClick={() => {
+                          setWaktu('12:00 - 18:00');
+                        }}
+                      >
+                        12:00 - 18:00
+                      </button>
+                    </div>
+                  </div>
+
+                  <div className="mt-5 flex justify-end">
+                    <button
+                      //   disabled={
+                      //     !selectedDay || !jenisPenyewaan || !lapangan || !waktu
+                      //   }
+                      className="py-3 px-4 bg-primary rounded-full text-white disabled:bg-sky-800 disabled:text-gray-200 disabled:"
+                      onClick={() => {
+                        setPage('informasi_pemesanan');
+                      }}
+                    >
+                      Lanjut Ke Informasi
+                    </button>
+                  </div>
+                </div>
               </div>
             </div>
+          </section>
+        )}
 
-            <div className="w-[45%] rounded-lg bg-white  py-8 px-6">
-              <form onSubmit={(e) => e.preventDefault()}>
-                <div>
-                  <p className="text-lg font-semibold">Pilih Jenis Penyewaan</p>
-
-                  <div className="flex gap-1.5 mt-4">
-                    <div className="flex items-center">
-                      <input
-                        checked
-                        id="jenis-penyewaan-1"
-                        type="radio"
-                        value="1"
-                        name="jenis-penyewaan"
-                        className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                      />
-                      <label
-                        htmlFor="jenis-penyewaan-1"
-                        className="ms-2 text-sm font-medium text-gray-900"
-                      >
-                        Per Sesi
-                      </label>
-                    </div>
-                    <div className="flex items-center">
-                      <input
-                        id="jenis-penyewaan-2"
-                        type="radio"
-                        value="2"
-                        name="jenis-penyewaan"
-                        className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                      />
-                      <label
-                        htmlFor="jenis-penyewaan-2"
-                        className="ms-2 text-sm font-medium text-gray-900"
-                      >
-                        Per Event (ex:pameran)
-                      </label>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="mt-4">
-                  <p className="text-lg font-semibold">Pilih Lapangan</p>
-                  <div className="mt-4 flex flex-col gap-2">
-                    <div className="py-2 px-3 border border-gray-500 rounded-lg flex gap-1 items-center">
-                      <div className="w-10 h-10 bg-gray-700"></div>
-                      <div>
-                        <p>Lapangan Bola Kamboja</p>
-                        <p>Mayor Santoso, Palembang</p>
-                      </div>
-                    </div>
-                    <div className="py-2 px-3 border border-gray-500 rounded-lg flex gap-1 items-center bg-gray-200">
-                      <div className="w-10 h-10 bg-gray-700"></div>
-                      <div>
-                        <p>Lapangan Bola Kamboja</p>
-                        <p>Mayor Santoso, Palembang</p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="mt-4">
-                  <p className="text-lg font-semibold">Pilih Lapangan</p>
-                  <p className="mt-2">
-                    Silahkan pilih lapangan terlebih dahulu
+        {page === 'informasi_pemesanan' && (
+          <section className="mt-20">
+            <div className="flex">
+              <div className="w-[55%]">
+                <div className="rounded-lg bg-white p-4">
+                  <p>
+                    Untuk menyimpan reservasi Anda, kami memerlukan data diri
+                    anda.
                   </p>
-
-                  <div className="mt-4 flex flex-col gap-2">
-                    <div className="py-4 px-3 border border-gray-500 rounded-lg text-center text-secondary">
-                      06:00 - 12:00
-                    </div>
-
-                    <div className="py-4 px-3 border border-gray-500 rounded-lg text-center text-secondary bg-gray-200">
-                      12:00 - 18:00
-                    </div>
-                  </div>
                 </div>
 
-                <div className="mt-5 flex justify-end">
-                  <button className="py-3 px-4 bg-primary rounded-full text-white">
-                    Lanjut Ke Informasi
-                  </button>
-                </div>
-              </form>
+                <div className="rounded-lg bg-white p-4"></div>
+              </div>
             </div>
-          </div>
-        </section>
+          </section>
+        )}
       </main>
     </div>
   );
